@@ -24,7 +24,18 @@
   --soft:#020617;
   --fill:#38bdf8;
 }
+.pill.warning{
+  background:#fff7ed;
+  color:#c2410c;
+  border-color:#fdba74;
+}
 
+[data-theme="dark"] .pill.warning{
+  background:#451a03;
+  color:#fed7aa;
+  border-color:#92400e;
+}
+  
 body{
   margin:0;
   padding:18px;
@@ -129,6 +140,7 @@ h3{margin-top:20px;}
 }
 .carousel-dots .active{background:white;}
 
+
 .qrWrap{
   display:flex;
   gap:14px;
@@ -215,7 +227,6 @@ h3{margin-top:20px;}
 <!-- PRESENTATION -->
 <div class="card pad">
   <h2 id="storyTitle"></h2>
-  <p class="story" id="storyIntro"></p>
 
   <div class="carousel">
     <div class="carousel-track" id="carouselTrack">
@@ -226,11 +237,21 @@ h3{margin-top:20px;}
     <div class="carousel-dots" id="carouselDots"></div>
   </div>
 
-  <p class="story" id="storyHistory"></p>
-  <p class="story" id="storyShow"></p>
-  <p class="story" id="storyFigures"></p>
-  <p class="story" id="storyTech"></p>
+  <h3 id="presentationTitle"></h3>
+  <p class="story" id="presentationTxt"></p>
+  
+  <h3 id="historyTitle"></h3>
+  <p class="story" id="historyTxt"></p>
 
+  <h3 id="figuresTitle"></h3>
+  <p class="story" id="figuresTxt"></p>
+
+  <h3 id="orgaTitle"></h3>
+  <p class="story" id="orgaTxt"></p>
+
+  <h3 id="scoutTitle"></h3>
+  <p class="story" id="scoutTxt"></p>
+  
   <h3 id="fundingTitle"></h3>
   <p class="story" id="fundingTxt"></p>
 
@@ -248,7 +269,7 @@ const TOKEN="4444";
 /* ========= LANGUES ========= */
 const LANGS={
 fr:{
- title:"Soutenir Show Vélo 2026",
+ title:'Soutenir "Show Vélo 2026"',
  goal:"Objectif",min:"Minimum",end:"Date limite",
  updated:"Mis à jour",
  minMilestone:"Seuil minimum",
@@ -257,20 +278,120 @@ fr:{
  ibanMsg:"Communication suggérée",
  thanks:"🙏 Merci pour votre soutien !",
  reached:"🎉 Objectif atteint !",
+ day:"jour",
+ days:"jours",
+ lastDay:"🔥 Dernier jour",
+  
  story:{
   title:"Le projet",
-  intro:"Le Show Vélo est un spectacle d’acrobaties à vélo préparé pendant un an par 60 scouts.",
-  history:"Tous les trois ans depuis 1942, la cour du Collège Saint-Michel devient une scène de spectacle.",
-  show:"Musique, lumière et figures synchronisées plongent le public dans une ambiance unique.",
-  figures:"Des figures collectives et acrobaties jusqu’à 4 scouts sur un même vélo.",
-  tech:"Son, lumières, pyrotechnie : une organisation technique hors du commun.",
-  fundingTitle:"À quoi servira le financement",
-  funding:"Principalement au son, à la lumière, aux impressions et à l’entretien des vélos.",
-  sponsorTitle:"Sponsoring",
-  sponsor:"Les entreprises peuvent afficher leur logo sur nos supports."
+  presentationTitle : "Présentation du projet",
+  presentation: "Nous faisons appel à votre générosité afin de soutenir la réalisation du Show-Vélo, un spectacle d’acrobaties à vélo préparé tout au long de l’année par près de soixante scouts âgés de 12 à 18 ans. Ce spectacle est entièrement gratuit et ne génère aucun bénéfice financier : l’ensemble des fonds récoltés sert exclusivement à sa mise en œuvre.",
+  historyTitle: "Histoire du show-vélo",
+  history: 'Tous les trois ans, et ce depuis 1942, à l’occasion de la fête du Collège Saint-Michel, la Quatrième Troupe des Ardents de Saint-Michel transforme la cour de l’école en une véritable scène de spectacle pour le traditionnel Show-Vélo. Durant une heure, musiques, jeux de lumière et enchaînements d’acrobaties plongent le public dans une ambiance nocturne saisissante. 
+      Véritable moment phare de la vie de la Troupe, le Show-Vélo est un événement unique mêlant agilité, force et créativité.
+      Face à un public de plus de 3 000 spectateurs, à la lueur des flambeaux, les scouts maîtrisent leur vélo pour réaliser des figures toujours plus impressionnantes.",
+  figuresTitle:"Exercices d’ensemble et acrobaties',
+  figures:'Le spectacle se compose de deux grands types de performances.
+
+      Les exercices d’ensemble reposent sur une synchronisation parfaite : alignement millimétré, timing rigoureux et concentration absolue permettent aux scouts de former de spectaculaires figures géométriques. Parmi les plus emblématiques, on retrouve le grand serpentin, l’hélice ou encore le ciseau.
+      Afin que le public puisse pleinement apprécier ces formes vues du ciel, deux écrans géants retransmettent la scène en direct.
+
+      Les acrobaties, quant à elles, mettent l’accent sur le risque et la difficulté technique. Les scouts montent à deux, trois, voire quatre sur un même vélo. Parmi les figures les plus connues figurent le triple T, le donjon, l’ange, le piston et enfin la grande pyramide, véritable fleuron du spectacle.',
+
+  orgaTitle:"Une organisation technique impressionnante",
+  orga:'Le Show-Vélo ne pourrait exister sans une organisation technique pointilleuse.
+      Accompagnement musical, effets pyrotechniques, et 25 000 watts de jeux de lumière contribuent à faire de cet événement un spectacle homogène et totalement hors du commun.
+
+      👉 Vidéo amateur d’un spectateur du Show-Vélo :
+      https://www.youtube.com/watch?v=hPdHtoZgmIo
+
+      Cette année, nous souhaitons aller plus loin en faisant appel à une équipe professionnelle pour assurer le tournage et la réalisation d’un film du spectacle.',
+  
+  scoutTitle:"Le scoutisme, nos valeurs",
+  scout:'Pour celles et ceux qui se demandent ce qu’est le scoutisme, cette vidéo illustre parfaitement nos valeurs, nos objectifs et notre engagement éducatif :
+      https://www.youtube.com/watch?v=H2oUAJ4sloM',
+  fundingTitle:"À quoi servira le financement ?",
+  funding:'Le poste de dépense principal concerne la sonorisation et les jeux de lumière. Un événement de cette ampleur, organisé dans un vaste espace, nécessite un important apport logistique et matériel.
+      À cela s’ajoutent d’autres frais indispensables tels que :
+
+      l’impression des affiches et carnets,
+
+      l’entretien et la réparation des vélos,
+
+      les besoins techniques liés au spectacle.
+
+      Grâce à votre contribution, vous permettrez à 60 scouts et à un public nombreux de vivre, pour la 29ᵉ fois depuis 1942, ce spectaculaire Show-Vélo.',
+  sponsorTitle:"Sponsoring pour les entreprises",
+  sponsor:'Pour les entreprises souhaitant soutenir le projet tout en gagnant en visibilité, un système de sponsoring a été mis en place.
+      En contribuant au financement du Show-Vélo, votre entreprise aura la possibilité :
+
+      d’afficher son logo sur des centaines d’affiches (format A2) placardées dans le Collège Saint-Michel, ses environs et dans plusieurs universités (UCL, ULB, Saint-Louis, …) ;
+
+      d’insérer sa publicité dans les carnets contenant le programme de la soirée et les annonces de nos sponsors, distribués aux spectateurs le soir du spectacle.'
  }
 },
-en:{ /* version EN possible plus tard */ }
+en:{
+  title:'Support "Show vélo 2026"',
+  goal:"Goal",min:"Minimum",end:"Deadline",
+  updated:"Updated",
+  minMilestone:"Minimum milestone",
+  remaining:"Remaining to goal",
+  iban:"Bank transfer (copy IBAN)",
+  ibanMsg:"Suggested message",
+  thanks:"🙏 Every contribution helps!",
+  reached:"🎉 Goal reached!",
+  day:"day",
+  days:"days",
+  lastDay:"🔥 Last day",
+    
+  story :{
+    title:"The project",
+presentationTitle : "Project presentation",
+presentation: "We are calling on your generosity to support the realization of the Show-Vélo, a bicycle acrobatics show prepared throughout the year by nearly sixty scouts aged 12 to 18. This show is completely free of charge and generates no financial profit: all funds raised are used exclusively for its organization and execution.",
+historyTitle: "History of the Show-Vélo",
+history: 'Every three years, and since 1942, on the occasion of the Saint-Michel College celebration, the Fourth Ardents Troop of Saint-Michel transforms the school courtyard into a true performance stage for the traditional Show-Vélo. For one hour, music, light shows and sequences of acrobatics immerse the audience in a striking nighttime atmosphere. 
+    A true highlight of the Troop’s life, the Show-Vélo is a unique event combining agility, strength and creativity.
+    In front of an audience of more than 3,000 spectators, by torchlight, the scouts master their bicycles to perform increasingly impressive figures.',
+figuresTitle:"Group exercises and acrobatics",
+figures:'The show consists of two main types of performances.
+
+    Group exercises rely on perfect synchronization: millimeter-precise alignment, rigorous timing and absolute concentration allow the scouts to form spectacular geometric figures. Among the most emblematic are the grand serpent, the helix and the scissors.
+    So that the audience can fully appreciate these shapes as seen from above, two giant screens broadcast the scene live.
+
+    Acrobatics, on the other hand, emphasize risk and technical difficulty. Scouts ride two, three, or even four on the same bicycle. Among the most well-known figures are the triple T, the dungeon, the angel, the piston and finally the great pyramid, the true centerpiece of the show.',
+
+orgaTitle:"An impressive technical organization",
+orga:'The Show-Vélo could not exist without meticulous technical organization.
+    Musical accompaniment, pyrotechnic effects, and 25,000 watts of lighting effects help make this event a cohesive and truly extraordinary spectacle.
+
+    👉 Amateur video from a Show-Vélo spectator:
+    https://www.youtube.com/watch?v=hPdHtoZgmIo
+
+    This year, we would like to go even further by calling on a professional team to handle the filming and production of a movie of the show.',
+  
+scoutTitle:"Scouting, our values",
+scout:'For those who wonder what scouting is, this video perfectly illustrates our values, our goals and our educational commitment:
+    https://www.youtube.com/watch?v=H2oUAJ4sloM',
+fundingTitle:"What will the funding be used for?",
+funding:'The main expense concerns sound systems and lighting. An event of this scale, organized in a large open space, requires significant logistical and material resources.
+    In addition to this, other essential costs include:
+
+    printing posters and booklets,
+
+    maintenance and repair of bicycles,
+
+    technical requirements related to the show.
+
+    Thanks to your contribution, you will allow 60 scouts and a large audience to experience, for the 29th time since 1942, this spectacular Show-Vélo.',
+sponsorTitle:"Sponsorship for companies",
+sponsor:'For companies wishing to support the project while gaining visibility, a sponsorship system has been put in place.
+    By contributing to the financing of the Show-Vélo, your company will have the opportunity to:
+
+    display its logo on hundreds of posters (A2 format) displayed throughout Saint-Michel College, its surroundings and several universities (UCL, ULB, Saint-Louis, …);
+
+    include its advertisement in the booklets containing the evening’s program and sponsor announcements, distributed to spectators on the night of the show.'
+
+  }
 };
 
 let lang=localStorage.lang||"fr";
@@ -293,11 +414,16 @@ function applyLang(){
  set("ibanMsgLbl",L.ibanMsg);
  const S=L.story;
  set("storyTitle",S.title);
- set("storyIntro",S.intro);
- set("storyHistory",S.history);
- set("storyShow",S.show);
- set("storyFigures",S.figures);
- set("storyTech",S.tech);
+ set("presentationTitle",S.presentationTitle);
+ set("presentationTxt",S.presentation);
+ set("historyTitle",S.historyTitle);
+ set("historyTxt",S.history);
+ set("figuresTitle",S.figuresTitle);
+ set("figuresTxt",S.figures);
+ set("orgaTitle",S.orgaTitle);
+ set("orgaTxt",S.orga);
+ set("scoutTitle",S.scoutTitle);
+ set("scoutTxt",S.scout);
  set("fundingTitle",S.fundingTitle);
  set("fundingTxt",S.funding);
  set("sponsorTitle",S.sponsorTitle);
@@ -318,8 +444,30 @@ async function loadData(){
  set("endTxt",d.endDate);
  set("updatedTxt",d.updated);
  set("minStatus",d.current>=d.minimum?"✅ Atteint":fmt(d.minimum-d.current));
- document.getElementById("daysLeft").textContent=
-   Math.ceil((new Date(d.endDate)-Date.now())/86400000)+" jours";
+ const days =
+  Math.max(0,
+    Math.ceil((new Date(d.endDate) - Date.now()) / 86400000));
+
+ const daysEl = document.getElementById("daysLeft");
+ daysEl.classList.remove("warning");
+
+ let label;
+
+ if(days === 0){
+   label = LANGS[lang].lastDay;
+   daysEl.classList.add("warning");
+ }
+ else{
+   const unit = days === 1 ? LANGS[lang].day : LANGS[lang].days;
+   label = `⏳ ${days} ${unit}`;
+
+   if(days <= 3){
+     daysEl.classList.add("warning");
+   }
+ }
+
+ daysEl.textContent = label;
+
 
  if(d.payconiqQr){
   document.getElementById("qrImg").src=d.payconiqQr;
