@@ -59,6 +59,9 @@ h3{margin-top:20px;}
 .row{display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:var(--muted);}
 .pill{border:1px solid var(--border);padding:3px 9px;border-radius:999px;}
 
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.box{border:1px solid var(--border);border-radius:14px;padding:12px;}
+
 .btn{
   padding:10px 12px;
   border-radius:12px;
@@ -87,10 +90,11 @@ h3{margin-top:20px;}
   font-weight:900;
   background:
     linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,0)),
-    url("img/POSTER.jpg") center/cover;
+    url("img/POSTER.jpg") center/cover,
+    #333;
 }
 
-/* CARROUSEL */
+/* CAROUSEL */
 .carousel{
   position:relative;
   overflow:hidden;
@@ -107,6 +111,7 @@ h3{margin-top:20px;}
   min-width:100%;
   background-size:cover;
   background-position:center;
+  background-color:#333;
 }
 .carousel-dots{
   position:absolute;
@@ -122,9 +127,22 @@ h3{margin-top:20px;}
   border-radius:50%;
   background:rgba(255,255,255,.4);
 }
-.carousel-dots .active{
-  background:white;
+.carousel-dots .active{background:white;}
+
+.qrWrap{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  margin-top:14px;
 }
+.qr{
+  width:96px;
+  height:96px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:var(--soft);
+}
+.small{font-size:12px;color:var(--muted);}
 </style>
 </head>
 
@@ -147,9 +165,13 @@ h3{margin-top:20px;}
     <div class="top">
       <div>
         <h1 id="title"></h1>
-        <div class="sub"><span id="goalLbl"></span> : <span id="goalTxt"></span></div>
+        <div class="sub">
+          <span id="goalLbl"></span> : <span id="goalTxt"></span> •
+          <span id="minLbl"></span> : <span id="minTxt"></span> •
+          <span id="endLbl"></span> : <span id="endTxt"></span>
+        </div>
       </div>
-      <div class="amount" id="currentTxt"></div>
+      <div class="amount" id="currentTxt">—</div>
     </div>
 
     <div class="bar"><div class="fill" id="fill"></div></div>
@@ -159,17 +181,42 @@ h3{margin-top:20px;}
       <div class="pill" id="daysLeft"></div>
     </div>
 
+    <div class="grid">
+      <div class="box">
+        <div class="small" id="minMilestoneLbl"></div>
+        <div id="minStatus"></div>
+      </div>
+      <div class="box">
+        <div class="small" id="remainingLbl"></div>
+        <div id="remainingTxt"></div>
+      </div>
+    </div>
+
     <button class="btn primary" id="btnIban"></button>
+
+    <div class="qrWrap" id="qrWrap" style="display:none;">
+      <img class="qr" id="qrImg">
+      <div class="small">
+        <strong>Payconiq</strong><br>
+        Scan du QR code (montant libre)<br>
+        <code>Show Vélo 2026</code>
+      </div>
+    </div>
+
+    <div class="small">
+      <span id="ibanMsgLbl"></span><br>
+      <code>Show Vélo 2026</code>
+    </div>
+
+    <div class="small" id="statusTxt"></div>
   </div>
 </div>
 
 <!-- PRESENTATION -->
 <div class="card pad">
   <h2 id="storyTitle"></h2>
-
   <p class="story" id="storyIntro"></p>
 
-  <!-- CARROUSEL -->
   <div class="carousel">
     <div class="carousel-track" id="carouselTrack">
       <div class="carousel-slide" style="background-image:url('img/show1.jpg')"></div>
@@ -194,32 +241,131 @@ h3{margin-top:20px;}
 </div>
 
 <script>
-/* ===== CARROUSEL ===== */
-const track=document.getElementById("carouselTrack");
-const slides=[...track.children];
-const dots=document.getElementById("carouselDots");
-let index=0;
+/* ========= CONFIG ========= */
+const DATA_URL="https://script.google.com/macros/s/AKfycbx1iVPVJljLOlPqTEr70yCWfVn6z61xA5FxZSJBhzZtUQKBP1B4Xe5GUZNi9Nir4xNR/exec";
+const TOKEN="4444";
 
-slides.forEach((_,i)=>{
-  const d=document.createElement("span");
-  if(i===0)d.classList.add("active");
-  dots.appendChild(d);
-});
+/* ========= LANGUES ========= */
+const LANGS={
+fr:{
+ title:"Soutenir Show Vélo 2026",
+ goal:"Objectif",min:"Minimum",end:"Date limite",
+ updated:"Mis à jour",
+ minMilestone:"Seuil minimum",
+ remaining:"Reste à atteindre",
+ iban:"Virement bancaire (copier IBAN)",
+ ibanMsg:"Communication suggérée",
+ thanks:"🙏 Merci pour votre soutien !",
+ reached:"🎉 Objectif atteint !",
+ story:{
+  title:"Le projet",
+  intro:"Le Show Vélo est un spectacle d’acrobaties à vélo préparé pendant un an par 60 scouts.",
+  history:"Tous les trois ans depuis 1942, la cour du Collège Saint-Michel devient une scène de spectacle.",
+  show:"Musique, lumière et figures synchronisées plongent le public dans une ambiance unique.",
+  figures:"Des figures collectives et acrobaties jusqu’à 4 scouts sur un même vélo.",
+  tech:"Son, lumières, pyrotechnie : une organisation technique hors du commun.",
+  fundingTitle:"À quoi servira le financement",
+  funding:"Principalement au son, à la lumière, aux impressions et à l’entretien des vélos.",
+  sponsorTitle:"Sponsoring",
+  sponsor:"Les entreprises peuvent afficher leur logo sur nos supports."
+ }
+},
+en:{ /* version EN possible plus tard */ }
+};
 
-setInterval(()=>{
-  index=(index+1)%slides.length;
-  track.style.transform=`translateX(-${index*100}%)`;
-  [...dots.children].forEach((d,i)=>d.classList.toggle("active",i===index));
-},4000);
-
-/* ===== LANG / THEME (déjà vu avant) ===== */
+let lang=localStorage.lang||"fr";
 let theme=localStorage.theme||"light";
 document.documentElement.dataset.theme=theme;
+
+const set=(id,v)=>document.getElementById(id).textContent=v;
+const fmt=n=>new Intl.NumberFormat("fr-BE",{style:"currency",currency:"EUR",maximumFractionDigits:0}).format(n);
+
+function applyLang(){
+ const L=LANGS[lang];
+ set("title",L.title);
+ set("goalLbl",L.goal);
+ set("minLbl",L.min);
+ set("endLbl",L.end);
+ set("updatedLbl",L.updated);
+ set("minMilestoneLbl",L.minMilestone);
+ set("remainingLbl",L.remaining);
+ set("btnIban",L.iban);
+ set("ibanMsgLbl",L.ibanMsg);
+ const S=L.story;
+ set("storyTitle",S.title);
+ set("storyIntro",S.intro);
+ set("storyHistory",S.history);
+ set("storyShow",S.show);
+ set("storyFigures",S.figures);
+ set("storyTech",S.tech);
+ set("fundingTitle",S.fundingTitle);
+ set("fundingTxt",S.funding);
+ set("sponsorTitle",S.sponsorTitle);
+ set("sponsorTxt",S.sponsor);
+}
+
+/* ========= DATA ========= */
+async function loadData(){
+ const r=await fetch(`${DATA_URL}?token=${TOKEN}`);
+ const d=await r.json();
+
+ const pct=Math.min(100,Math.round(d.current/d.goal*100));
+ document.getElementById("fill").style.width=pct+"%";
+ set("currentTxt",`${fmt(d.current)} (${pct}%)`);
+ set("goalTxt",fmt(d.goal));
+ set("minTxt",fmt(d.minimum));
+ set("remainingTxt",fmt(Math.max(0,d.goal-d.current)));
+ set("endTxt",d.endDate);
+ set("updatedTxt",d.updated);
+ set("minStatus",d.current>=d.minimum?"✅ Atteint":fmt(d.minimum-d.current));
+ document.getElementById("daysLeft").textContent=
+   Math.ceil((new Date(d.endDate)-Date.now())/86400000)+" jours";
+
+ if(d.payconiqQr){
+  document.getElementById("qrImg").src=d.payconiqQr;
+  document.getElementById("qrWrap").style.display="flex";
+ }
+
+ const btn=document.getElementById("btnIban");
+ btn.onclick=async()=>{
+  await navigator.clipboard.writeText(d.iban);
+  btn.textContent="IBAN copié ✅";
+  btn.classList.add("success");
+  setTimeout(()=>{btn.classList.remove("success");applyLang();},1500);
+ };
+
+ set("statusTxt",d.current>=d.goal?LANGS[lang].reached:LANGS[lang].thanks);
+}
+
+/* ========= CAROUSEL ========= */
+const track=document.getElementById("carouselTrack");
+const dots=document.getElementById("carouselDots");
+[...track.children].forEach((_,i)=>{
+ const d=document.createElement("span");
+ if(i===0)d.classList.add("active");
+ dots.appendChild(d);
+});
+let index=0;
+setInterval(()=>{
+ index=(index+1)%track.children.length;
+ track.style.transform=`translateX(-${index*100}%)`;
+ [...dots.children].forEach((d,i)=>d.classList.toggle("active",i===index));
+},4000);
+
+/* ========= UI ========= */
 document.getElementById("toggleTheme").onclick=()=>{
-  theme=theme==="light"?"dark":"light";
-  document.documentElement.dataset.theme=theme;
-  localStorage.theme=theme;
+ theme=theme==="light"?"dark":"light";
+ document.documentElement.dataset.theme=theme;
+ localStorage.theme=theme;
 };
+document.getElementById("toggleLang").onclick=()=>{
+ lang=lang==="fr"?"en":"fr";
+ localStorage.lang=lang;
+ applyLang();
+};
+
+applyLang();
+loadData();
 </script>
 </body>
 </html>
