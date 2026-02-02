@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Fundraiser</title>
+<title>Show Vélo 2026</title>
 
 <style>
 :root{
@@ -25,41 +25,15 @@
   --fill:#38bdf8;
 }
 
-html, body {
-  width: 100%;
-  min-height: 100%;
-}
-
 body{
   margin:0;
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
   padding:18px;
   background:var(--soft);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
-.wrap{
-  width:100%;
-  max-width:1100px;
-}
-
-.tools{display:flex;gap:8px;margin-bottom:10px;}
-
-.qrWrap{
-  display:flex;
-  gap:14px;
-  align-items:center;
-  margin-top:14px;
-}
-.qr{
-  width:96px;
-  height:96px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:var(--soft);
-}
-
+.wrap{max-width:1100px;margin:auto;}
+.tools{display:flex;gap:8px;margin-bottom:12px;}
 
 .card{
   background:var(--bg);
@@ -67,13 +41,17 @@ body{
   border-radius:var(--radius);
   box-shadow:0 8px 26px rgba(0,0,0,.06);
   overflow:hidden;
+  margin-bottom:16px;
 }
 
-.pad{padding:18px 20px;}
+.pad{padding:20px;}
 .top{display:flex;justify-content:space-between;gap:12px;}
-h1{margin:0;font-size:20px;}
-.sub{color:var(--muted);font-size:13px;margin-top:4px;}
-.amount{font-weight:900;font-size:18px;white-space:nowrap;}
+h1{margin:0;font-size:22px;}
+h2{margin-top:0;}
+h3{margin-top:20px;}
+
+.sub{color:var(--muted);font-size:13px;}
+.amount{font-weight:900;font-size:18px;}
 
 .bar{margin-top:14px;height:14px;background:var(--soft);border-radius:999px;overflow:hidden;}
 .fill{height:100%;width:0%;background:var(--fill);transition:width .8s ease;}
@@ -81,12 +59,6 @@ h1{margin:0;font-size:20px;}
 .row{display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:var(--muted);}
 .pill{border:1px solid var(--border);padding:3px 9px;border-radius:999px;}
 
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
-.box{border:1px solid var(--border);border-radius:14px;padding:12px;}
-.label{font-size:12px;color:var(--muted);}
-.value{margin-top:4px;font-weight:800;}
-
-.cta{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;}
 .btn{
   padding:10px 12px;
   border-radius:12px;
@@ -98,195 +70,156 @@ h1{margin:0;font-size:20px;}
 .btn.primary{background:var(--fill);color:#fff;}
 .btn.success{background:var(--success);color:#fff;}
 
-.small{font-size:12px;color:var(--muted);margin-top:8px;}
-.status{border-top:1px solid var(--border);padding:12px 20px;font-size:13px;}
-.err{color:#b91c1c;font-size:13px;margin-top:8px;}
-.admin{margin-top:10px;font-size:12px;white-space:pre-wrap;}
+.story{
+  font-size:14px;
+  line-height:1.7;
+  margin-top:12px;
+}
+
+/* HERO */
+.hero{
+  height:340px;
+  display:flex;
+  align-items:flex-end;
+  padding:20px;
+  color:white;
+  font-size:26px;
+  font-weight:900;
+  background:
+    linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,0)),
+    url("img/hero.jpg") center/cover;
+}
+
+/* CARROUSEL */
+.carousel{
+  position:relative;
+  overflow:hidden;
+  border-radius:16px;
+  margin:18px 0;
+  height:280px;
+}
+.carousel-track{
+  display:flex;
+  height:100%;
+  transition:transform .6s ease;
+}
+.carousel-slide{
+  min-width:100%;
+  background-size:cover;
+  background-position:center;
+}
+.carousel-dots{
+  position:absolute;
+  bottom:10px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:6px;
+}
+.carousel-dots span{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:rgba(255,255,255,.4);
+}
+.carousel-dots .active{
+  background:white;
+}
 </style>
 </head>
 
 <body>
 <div class="wrap">
 
-  <div class="tools">
-    <button class="btn" id="toggleTheme">🌙</button>
-    <button class="btn" id="toggleLang">FR / EN</button>
-  </div>
+<div class="tools">
+  <button class="btn" id="toggleTheme">🌙</button>
+  <button class="btn" id="toggleLang">FR / EN</button>
+</div>
 
-  <div class="card">
-    <div class="pad">
-      <div class="top">
-        <div>
-          <h1 id="title"></h1>
-          <div class="sub">
-            <span id="goalLbl"></span>: <span id="goalTxt"></span> •
-            <span id="minLbl"></span>: <span id="minTxt"></span> •
-            <span id="endLbl"></span>: <span id="endTxt"></span>
-          </div>
-        </div>
-        <div class="amount" id="raisedTxt">—</div>
+<!-- HERO -->
+<div class="card hero">
+  Show Vélo 2026
+</div>
+
+<!-- CROWDFUNDING -->
+<div class="card">
+  <div class="pad">
+    <div class="top">
+      <div>
+        <h1 id="title"></h1>
+        <div class="sub"><span id="goalLbl"></span> : <span id="goalTxt"></span></div>
       </div>
-
-      <div class="bar"><div class="fill" id="fill"></div></div>
-
-      <div class="row">
-        <div><span id="updatedLbl"></span>: <strong id="updatedTxt"></strong></div>
-        <div class="pill" id="daysLeft"></div>
-      </div>
-
-      <div class="grid">
-        <div class="box">
-          <div class="label" id="minMilestoneLbl"></div>
-          <div class="value" id="minStatus"></div>
-        </div>
-        <div class="box">
-          <div class="label" id="remainingLbl"></div>
-          <div class="value" id="remainingTxt"></div>
-        </div>
-      </div>
-
-      <div class="cta">
-        <button class="btn primary" id="btnIban"></button>
-      </div>
-
-      <div class="qrWrap" id="qrWrap" style="display:none;">
-        <img class="qr" id="qrImg" alt="Payconiq QR">
-          <div class="small">
-          <strong>Payconiq (instant)</strong><br>
-            Scanez le QR code (montant libre)<br>
-            <code>Show vélo 2026 – Your Name</code>
-        </div>
-      </div>
-
-
-      <div class="small">
-        <span id="ibanMsgLbl"></span><br>
-        <code>Show vélo 2026 – Your Name</code>
-      </div>
-
-      <div class="err" id="error"></div>
-      <div class="admin" id="adminBox" style="display:none;"></div>
+      <div class="amount" id="currentTxt"></div>
     </div>
 
-    <div class="status" id="statusTxt">Loading…</div>
+    <div class="bar"><div class="fill" id="fill"></div></div>
+
+    <div class="row">
+      <div><span id="updatedLbl"></span> : <strong id="updatedTxt"></strong></div>
+      <div class="pill" id="daysLeft"></div>
+    </div>
+
+    <button class="btn primary" id="btnIban"></button>
   </div>
 </div>
 
+<!-- PRESENTATION -->
+<div class="card pad">
+  <h2 id="storyTitle"></h2>
+
+  <p class="story" id="storyIntro"></p>
+
+  <!-- CARROUSEL -->
+  <div class="carousel">
+    <div class="carousel-track" id="carouselTrack">
+      <div class="carousel-slide" style="background-image:url('img/show1.jpg')"></div>
+      <div class="carousel-slide" style="background-image:url('img/show2.jpg')"></div>
+      <div class="carousel-slide" style="background-image:url('img/show3.jpg')"></div>
+    </div>
+    <div class="carousel-dots" id="carouselDots"></div>
+  </div>
+
+  <p class="story" id="storyHistory"></p>
+  <p class="story" id="storyShow"></p>
+  <p class="story" id="storyFigures"></p>
+  <p class="story" id="storyTech"></p>
+
+  <h3 id="fundingTitle"></h3>
+  <p class="story" id="fundingTxt"></p>
+
+  <h3 id="sponsorTitle"></h3>
+  <p class="story" id="sponsorTxt"></p>
+</div>
+
+</div>
+
 <script>
-const DATA_URL="https://script.google.com/macros/s/AKfycbx1iVPVJljLOlPqTEr70yCWfVn6z61xA5FxZSJBhzZtUQKBP1B4Xe5GUZNi9Nir4xNR/exec";
-const TOKEN="4444";
+/* ===== CARROUSEL ===== */
+const track=document.getElementById("carouselTrack");
+const slides=[...track.children];
+const dots=document.getElementById("carouselDots");
+let index=0;
 
-const LANGS={
-  fr:{
-    title:'Soutenir "Show vélo 2026"',
-    goal:"Objectif",min:"Minimum",end:"Date limite",
-    updated:"Mis à jour",
-    minMilestone:"Seuil minimum",
-    remaining:"Reste à atteindre",
-    iban:"Virement bancaire (copier IBAN)",
-    ibanMsg:"Communication suggérée",
-    thanks:"🙏 Merci pour votre soutien !",
-    reached:"🎉 Objectif atteint !"
-  },
-  en:{
-    title:'Support "Show vélo 2026"',
-    goal:"Goal",min:"Minimum",end:"Deadline",
-    updated:"Updated",
-    minMilestone:"Minimum milestone",
-    remaining:"Remaining to goal",
-    iban:"Bank transfer (copy IBAN)",
-    ibanMsg:"Suggested message",
-    thanks:"🙏 Every contribution helps!",
-    reached:"🎉 Goal reached!"
-  }
-};
+slides.forEach((_,i)=>{
+  const d=document.createElement("span");
+  if(i===0)d.classList.add("active");
+  dots.appendChild(d);
+});
 
-let lang=localStorage.lang||"fr";
+setInterval(()=>{
+  index=(index+1)%slides.length;
+  track.style.transform=`translateX(-${index*100}%)`;
+  [...dots.children].forEach((d,i)=>d.classList.toggle("active",i===index));
+},4000);
+
+/* ===== LANG / THEME (déjà vu avant) ===== */
 let theme=localStorage.theme||"light";
 document.documentElement.dataset.theme=theme;
-
-const set=(id,v)=>document.getElementById(id).textContent=v;
-const fmt=n=>new Intl.NumberFormat("fr-BE",{style:"currency",currency:"EUR",maximumFractionDigits:0}).format(n);
-
-function applyLang(){
-  const L=LANGS[lang];
-  set("title",L.title);
-  set("goalLbl",L.goal);
-  set("minLbl",L.min);
-  set("endLbl",L.end);
-  set("updatedLbl",L.updated);
-  set("minMilestoneLbl",L.minMilestone);
-  set("remainingLbl",L.remaining);
-  set("btnIban",L.iban);
-  set("ibanMsgLbl",L.ibanMsg);
-}
-
-async function loadData(){
-  const r=await fetch(`${DATA_URL}?token=${TOKEN}`);
-  const d=await r.json();
-
-  const pct=Math.min(100,Math.round(d.raised/d.goal*100));
-  document.getElementById("fill").style.width=pct+"%";
-
-  set("raisedTxt", `${fmt(d.raised)} (${pct}%)`);
-  set("goalTxt",fmt(d.goal));
-  set("minTxt",fmt(d.minimum));
-  set("remainingTxt",fmt(Math.max(0,d.goal-d.raised)));
-  set("endTxt",d.endDate);
-  set("updatedTxt",d.updated);
-  if (d.raised >= d.minimum) {
-  set("minStatus","✅ Atteint");
-  } else {
-  set("minStatus", fmt(d.minimum - d.raised));
-  }
-
-  //Date
-  const days=Math.ceil((new Date(d.endDate)-Date.now())/86400000);
-  set("daysLeft",days>0?`${days} jours`:"Terminé");
-
-  // QR Payconiq
-  if (d.payconiqQr) {
-    document.getElementById("qrImg").src = d.payconiqQr;
-    document.getElementById("qrWrap").style.display = "flex";
-  } else {
-    document.getElementById("qrWrap").style.display = "none";
-  }
-
-  
-  //Iban
-  const btn=document.getElementById("btnIban");
-  btn.onclick=async()=>{
-    await navigator.clipboard.writeText(d.iban);
-    btn.classList.add("success");
-    btn.textContent="IBAN copié ✅";
-    setTimeout(()=>{btn.classList.remove("success");applyLang();},1600);
-  };
-
-  set("statusTxt",d.raised>=d.goal?LANGS[lang].reached:LANGS[lang].thanks);
-
-  if(location.search.includes("admin=1")){
-    const a=document.getElementById("adminBox");
-    a.style.display="block";
-    a.textContent=JSON.stringify(d,null,2);
-  }
-}
-
-//Dark mode  
 document.getElementById("toggleTheme").onclick=()=>{
   theme=theme==="light"?"dark":"light";
   document.documentElement.dataset.theme=theme;
   localStorage.theme=theme;
 };
-
-//Langue  
-document.getElementById("toggleLang").onclick=()=>{
-  lang=lang==="fr"?"en":"fr";
-  localStorage.lang=lang;
-  applyLang();
-};
-
-applyLang();
-loadData();
 </script>
 </body>
 </html>
