@@ -389,21 +389,37 @@ function applyLang(){
 
 /* ========= DATA ========= */
 async function loadData(){
- const r=await fetch(`${DATA_URL}?token=${TOKEN}`);
- const d=await r.json();
+ try{
+    const r = await fetch(`${DATA_URL}?token=${TOKEN}`);
+    if(!r.ok) throw new Error("Fetch failed");
+    const d = await r.json();
 
- const pct=Math.min(100,Math.round(d.current/d.goal*100));
- document.getElementById("fill").style.width=pct+"%";
- set("currentTxt",`${fmt(d.current)} (${pct}%)`);
- set("goalTxt",fmt(d.goal));
- set("minTxt",fmt(d.minimum));
- set("remainingTxt",fmt(Math.max(0,d.goal-d.current)));
- set("endTxt",d.endDate);
- set("updatedTxt",d.updated);
- set("minStatus",d.current>=d.minimum?"✅ Atteint":fmt(d.minimum-d.current));
- const days =
-  Math.max(0,
-    Math.ceil((new Date(d.endDate) - Date.now()) / 86400000));
+    const pct=Math.min(100,Math.round(d.current/d.goal*100));
+    document.getElementById("fill").style.width=pct+"%";
+    set("currentTxt",`${fmt(d.current)} (${pct}%)`);
+    set("goalTxt",fmt(d.goal));
+    set("minTxt",fmt(d.minimum));
+    set("remainingTxt",fmt(Math.max(0,d.goal-d.current)));
+    set("endTxt",d.endDate);
+    set("updatedTxt",d.updated);
+    set("minStatus",d.current>=d.minimum?"✅ Atteint":fmt(d.minimum-d.current));
+
+    if(d.payconiqQr){
+      document.getElementById("qrImg").src=d.payconiqQr;
+      document.getElementById("qrWrap").style.display="flex";
+    }
+
+    set("statusTxt",d.current>=d.goal?LANGS[lang].reached:LANGS[lang].thanks);
+
+  }catch(err){
+    console.error(err);
+    document.getElementById("statusTxt").textContent =
+      "⚠️ Données temporairement indisponibles";
+  }
+ 
+  
+  
+ const days = Math.max(0,Math.ceil((new Date(d.endDate) - Date.now()) / 86400000));
 
  const daysEl = document.getElementById("daysLeft");
  daysEl.classList.remove("warning");
