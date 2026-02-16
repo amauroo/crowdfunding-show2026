@@ -91,7 +91,7 @@ h3{margin-top:20px;}
   margin-top:12px;
 }
 
-/* HERO - Hauteur augmentée à 500px */
+/* HERO - Taille maintenue, image descendue de 15px */
 .hero{
   height:500px;
   display:flex;
@@ -102,17 +102,18 @@ h3{margin-top:20px;}
   font-weight:900;
   background:
     linear-gradient(to top, rgba(0,0,0,.7), rgba(0,0,0,0)),
-    url("img/POSTER.jpg") center/cover,
+    url("img/POSTER.jpg") center 15px / cover no-repeat, 
     #333;
 }
 
-/* CAROUSEL - Hauteur augmentée à 450px */
+/* CAROUSEL */
 .carousel{
   position:relative;
   overflow:hidden;
   border-radius:16px;
   margin:18px 0;
   height:450px; 
+  background: #222; /* Fond sombre pour les images en "contain" */
 }
 .carousel-track{
   display:flex;
@@ -121,9 +122,10 @@ h3{margin-top:20px;}
 }
 .carousel-slide{
   min-width:100%;
-  background-size:cover; /* "cover" remplit tout, "contain" montre l'image entière */
+  /* Passé en "contain" pour ne plus couper les images */
+  background-size:contain; 
   background-position:center;
-  background-color:#333;
+  background-repeat:no-repeat;
 }
 .carousel-dots{
   position:absolute;
@@ -162,7 +164,7 @@ h3{margin-top:20px;}
   border-radius: 14px;
   overflow: hidden;
   position: relative;
-  padding-bottom: 56.25%; /* Ratio 16:9 */
+  padding-bottom: 56.25%;
   height: 0;
   background: #000;
 }
@@ -279,11 +281,9 @@ h3{margin-top:20px;}
 </div>
 
 <script>
-/* ========= CONFIG ========= */
 const DATA_URL="https://script.google.com/macros/s/AKfycbyx9hFIluBr_UTahmez68hl3PG-dcRByqaKyCB6xU-Y15EEVXONuPGXt_84MP3U6Ohd/exec";
 const TOKEN="4444";
 
-/* ========= LANGUES ========= */
 const LANGS={
 fr:{
  title:'Soutenir "Show Vélo 2026"',
@@ -298,7 +298,6 @@ fr:{
  day:"jour",
  days:"jours",
  lastDay:"🔥 Dernier jour",
-  
  story:{
   title:"Le projet",
   presentationTitle : "Présentation du projet",
@@ -328,7 +327,6 @@ en:{
   day:"day",
   days:"days",
   lastDay:"🔥 Last day",
-    
   story:{
     title:"The project",
     presentationTitle : "Project presentation",
@@ -381,7 +379,6 @@ function applyLang(){
  set("sponsorTxt",S.sponsor);
 }
 
-/* ========= DATA ========= */
 async function loadData(){
   try{
     const r = await fetch(`${DATA_URL}?token=${TOKEN}`);
@@ -419,13 +416,14 @@ async function loadData(){
       document.getElementById("qrWrap").style.display = "flex";
     }
 
-    /* ---- YOUTUBE VIDEO (Correction de l'ID) ---- */
-    if (d.youtubeUrl) {
+    /* ---- YOUTUBE VIDEO (Nettoyage renforcé) ---- */
+    if (d.youtubeUrl && d.youtubeUrl.trim() !== "") {
+      const url = d.youtubeUrl.trim();
       let videoId = "";
-      if (d.youtubeUrl.includes('v=')) {
-        videoId = d.youtubeUrl.split('v=')[1].split('&')[0];
-      } else if (d.youtubeUrl.includes('youtu.be/')) {
-        videoId = d.youtubeUrl.split('youtu.be/')[1].split('?')[0];
+      if (url.includes('v=')) {
+        videoId = url.split('v=')[1].split('&')[0];
+      } else if (url.includes('youtu.be/')) {
+        videoId = url.split('youtu.be/')[1].split('?')[0];
       }
       
       if (videoId) {
@@ -453,7 +451,6 @@ async function loadData(){
   }
 }
 
-/* ========= CAROUSEL ========= */
 const track=document.getElementById("carouselTrack");
 const dots=document.getElementById("carouselDots");
 [...track.children].forEach((_,i)=>{
@@ -468,7 +465,6 @@ setInterval(()=>{
   [...dots.children].forEach((d,i)=>d.classList.toggle("active",i===index));
 },4000);
 
-/* ========= UI ========= */
 document.getElementById("toggleTheme").onclick=()=>{
   theme=theme==="light"?"dark":"light";
   document.documentElement.dataset.theme=theme;
