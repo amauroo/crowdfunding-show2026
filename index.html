@@ -112,7 +112,7 @@ h3{margin-top:20px;}
   overflow:hidden;
   border-radius:16px;
   margin:18px 0;
-  height:280px;
+  height:300px;
 }
 .carousel-track{
   display:flex;
@@ -141,7 +141,6 @@ h3{margin-top:20px;}
 }
 .carousel-dots .active{background:white;}
 
-
 .qrWrap{
   display:flex;
   gap:14px;
@@ -156,6 +155,24 @@ h3{margin-top:20px;}
   background:var(--soft);
 }
 .small{font-size:12px;color:var(--muted);}
+
+/* VIDEO CONTAINER */
+.video-wrap {
+  margin-top: 20px;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  padding-bottom: 56.25%; /* Ratio 16:9 */
+  height: 0;
+  background: #000;
+}
+.video-wrap iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 </style>
 </head>
 
@@ -167,12 +184,10 @@ h3{margin-top:20px;}
   <button class="btn" id="toggleLang">FR / EN</button>
 </div>
 
-<!-- HERO -->
 <div class="card hero">
   Show Vélo 2026
 </div>
 
-<!-- CROWDFUNDING -->
 <div class="card">
   <div class="pad">
     <div class="top">
@@ -225,7 +240,6 @@ h3{margin-top:20px;}
   </div>
 </div>
 
-<!-- PRESENTATION -->
 <div class="card pad">
   <h2 id="storyTitle"></h2>
 
@@ -234,6 +248,7 @@ h3{margin-top:20px;}
       <div class="carousel-slide" style="background-image:url('img/show1.jpg')"></div>
       <div class="carousel-slide" style="background-image:url('img/show2.jpg')"></div>
       <div class="carousel-slide" style="background-image:url('img/show3.jpg')"></div>
+      <div class="carousel-slide" style="background-image:url('img/show4.jpg')"></div>
     </div>
     <div class="carousel-dots" id="carouselDots"></div>
   </div>
@@ -250,8 +265,9 @@ h3{margin-top:20px;}
   <h3 id="orgaTitle"></h3>
   <p class="story" id="orgaTxt"></p>
 
-  <h3 id="scoutTitle"></h3>
-  <p class="story" id="scoutTxt"></p>
+  <div id="ytWrap" class="video-wrap" style="display:none;">
+    <iframe id="ytPlayer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
   
   <h3 id="fundingTitle"></h3>
   <p class="story" id="fundingTxt"></p>
@@ -288,26 +304,15 @@ fr:{
   presentationTitle : "Présentation du projet",
   presentation: `Nous faisons appel à votre générosité afin de soutenir la réalisation du Show-Vélo, un spectacle d’acrobaties à vélo préparé tout au long de l’année par près de cinquante scouts âgés de 12 à 18 ans. Ce spectacle rassemble synchronisation, technique et créativité.`,
   historyTitle: "Histoire du show-vélo",
-  history: `Véritable moment phare de la vie de la Troupe, le Show-Vélo est un événement unique mêlant agilité, force et créativité.
-      Face à un public de plus de 3 000 spectateurs, à la lueur des flambeaux, les scouts maîtrisent leur vélo pour réaliser des figures toujours plus impressionnantes.`,
+  history: `Véritable moment phare de la vie de la Troupe, le Show-Vélo est un événement unique mêlant agilité, force et créativité. Face à un public de plus de 3 000 spectateurs, à la lueur des flambeaux, les scouts maîtrisent leur vélo pour réaliser des figures toujours plus impressionnantes.`,
   figuresTitle:"Exercices d’ensemble et acrobaties",
-  figures:`Le spectacle se compose de deux grands types de performances.
-      Les exercices d’ensemble reposent sur une synchronisation parfaite : alignement millimétré, timing rigoureux et concentration absolue permettent aux scouts de former des figures spectaculaires.
-      Les acrobaties mettent l’accent sur le risque et la difficulté technique.`,
+  figures:`Le spectacle se compose de deux grands types de performances. Les exercices d’ensemble reposent sur une synchronisation parfaite : alignement millimétré, timing rigoureux et concentration absolue permettent aux scouts de former des figures spectaculaires. Les acrobaties mettent l’accent sur le risque et la difficulté technique.`,
   orgaTitle:"Une organisation technique impressionnante",
-  orga:`Le Show-Vélo ne pourrait exister sans une organisation technique pointilleuse.
-      Accompagnement musical, effets pyrotechniques, et 25 000 watts de jeux de lumière contribuent à faire de cet événement un spectacle hors du commun.
-      Cette année, nous souhaitons aller plus loin en faisant appel à une équipe professionnelle pour assurer le tournage et la retransmission du spectacle en direct.`,
-  
-  scoutTitle:"Le scoutisme, nos valeurs",
-  scout:`Pour celles et ceux qui se demandent ce qu’est le scoutisme, cette vidéo illustre parfaitement nos valeurs, nos objectifs et notre engagement éducatif :
-      https://www.youtube.com/watch?v=H2oUAJ4sloM`,
+  orga:`Le Show-Vélo ne pourrait exister sans une organisation technique pointilleuse. Accompagnement musical, effets pyrotechniques, et 25 000 watts de jeux de lumière contribuent à faire de cet événement un spectacle hors du commun. Cette année, nous souhaitons aller plus loin en faisant appel à une équipe professionnelle pour assurer le tournage et la retransmission du spectacle en direct.`,
   fundingTitle:"À quoi servira le financement ?",
-  funding:`Le poste de dépense principal concerne la sonorisation et les jeux de lumière. Un événement de cette ampleur nécessite un important apport logistique et technique.
-      À cela s’ajoutent d’autres frais indispensables tels que l’impression des affiches, l’entretien et la réparation des vélos.`,
+  funding:`Le poste de dépense principal concerne la sonorisation et les jeux de lumière. Un événement de cette ampleur nécessite un important apport logistique et technique. À cela s’ajoutent d’autres frais indispensables tels que l’impression des affiches, l’entretien et la réparation des vélos.`,
   sponsorTitle:"Sponsoring pour les entreprises",
-  sponsor:`Pour les entreprises souhaitant soutenir le projet tout en gagnant en visibilité, un système de sponsoring a été mis en place.
-      En contribuant, votre entreprise pourra afficher son logo sur des affiches et l’insérer dans les carnets distribués lors du spectacle.`
+  sponsor:`Pour les entreprises souhaitant soutenir le projet tout en gagnant en visibilité, un système de sponsoring a été mis en place. En contribuant, votre entreprise pourra afficher son logo sur des affiches et l’insérer dans les carnets distribués lors du spectacle.`
  }
 },
 en:{
@@ -331,23 +336,13 @@ en:{
     historyTitle: "History of the Show-Vélo",
     history: `Every three years, and since 1942, on the occasion of the Saint-Michel College celebration, the Fourth Ardents Troop of Saint-Michel transforms the school courtyard into a true performance space. A true highlight of the Troop’s life, the Show-Vélo combines agility, strength and creativity.`,
     figuresTitle:"Group exercises and acrobatics",
-    figures:`The show consists of two main types of performances.
-    Group exercises rely on perfect synchronization: millimeter-precise alignment, rigorous timing and absolute concentration allow the scouts to form spectacular geometric figures.
-    Acrobatics emphasize risk and technical difficulty.`,
+    figures:`The show consists of two main types of performances. Group exercises rely on perfect synchronization: millimeter-precise alignment, rigorous timing and absolute concentration allow the scouts to form spectacular geometric figures. Acrobatics emphasize risk and technical difficulty.`,
     orgaTitle:"An impressive technical organization",
-    orga:`The Show-Vélo could not exist without meticulous technical organization.
-    Musical accompaniment, pyrotechnic effects, and 25,000 watts of lighting effects help make this event extraordinary.
-    This year, we want to go further by using a professional team to ensure the filming and live broadcast of the show.`,
-    
-    scoutTitle:"Scouting, our values",
-    scout:`For those who wonder what scouting is, this video perfectly illustrates our values and educational commitment:
-    https://www.youtube.com/watch?v=H2oUAJ4sloM`,
+    orga:`The Show-Vélo could not exist without meticulous technical organization. Musical accompaniment, pyrotechnic effects, and 25,000 watts of lighting effects help make this event extraordinary. This year, we want to go further by using a professional team to ensure the filming and live broadcast of the show.`,
     fundingTitle:"What will the funding be used for?",
-    funding:`The main expense concerns sound systems and lighting. An event of this scale requires significant logistical and material resources.
-    Other essential costs include printing posters and booklets, maintenance and repair of bicycles.`,
+    funding:`The main expense concerns sound systems and lighting. An event of this scale requires significant logistical and material resources. Other essential costs include printing posters and booklets, maintenance and repair of bicycles.`,
     sponsorTitle:"Sponsorship for companies",
-    sponsor:`For companies wishing to support the project while gaining visibility, a sponsorship system has been put in place.
-    By contributing, your company can display its logo on posters and include an ad in the event booklets.`
+    sponsor:`For companies wishing to support the project while gaining visibility, a sponsorship system has been put in place. By contributing, your company can display its logo on posters and include an ad in the event booklets.`
     }
   }
 };
@@ -380,8 +375,6 @@ function applyLang(){
  set("figuresTxt",S.figures);
  set("orgaTitle",S.orgaTitle);
  set("orgaTxt",S.orga);
- set("scoutTitle",S.scoutTitle);
- set("scoutTxt",S.scout);
  set("fundingTitle",S.fundingTitle);
  set("fundingTxt",S.funding);
  set("sponsorTitle",S.sponsorTitle);
@@ -409,29 +402,32 @@ async function loadData(){
     if (!d.endDate) {
       document.getElementById("daysLeft").textContent = "—";
     } else {
-    
-    const days = Math.max(
-      0,
-      Math.ceil((new Date(d.endDate) - Date.now()) / 86400000)
-    );
-
-    const daysEl = document.getElementById("daysLeft");
-    daysEl.classList.remove("warning");
-
-    if (days === 0) {
-      daysEl.textContent = LANGS[lang].lastDay;
-      daysEl.classList.add("warning");
-    } else {
-      const unit = days === 1 ? LANGS[lang].day : LANGS[lang].days;
-      daysEl.textContent = `⏳ ${days} ${unit}`;
-      if (days <= 3) daysEl.classList.add("warning");
-    }
+      const days = Math.max(0, Math.ceil((new Date(d.endDate) - Date.now()) / 86400000));
+      const daysEl = document.getElementById("daysLeft");
+      daysEl.classList.remove("warning");
+      if (days === 0) {
+        daysEl.textContent = LANGS[lang].lastDay;
+        daysEl.classList.add("warning");
+      } else {
+        const unit = days === 1 ? LANGS[lang].day : LANGS[lang].days;
+        daysEl.textContent = `⏳ ${days} ${unit}`;
+        if (days <= 3) daysEl.classList.add("warning");
+      }
     }
 
     /* ---- PAYCONIQ ---- */
     if (d.payconiqQr) {
       document.getElementById("qrImg").src = d.payconiqQr;
       document.getElementById("qrWrap").style.display = "flex";
+    }
+
+    /* ---- YOUTUBE VIDEO ---- */
+    if (d.youtubeUrl) {
+      const videoId = d.youtubeUrl.split('v=')[1]?.split('&')[0];
+      if (videoId) {
+        document.getElementById("ytPlayer").src = `https://www.youtube.com/embed/${videoId}`;
+        document.getElementById("ytWrap").style.display = "block";
+      }
     }
 
     /* ---- IBAN ---- */
@@ -450,8 +446,7 @@ async function loadData(){
 
   } catch (err) {
     console.error(err);
-    document.getElementById("statusTxt").textContent =
-      "⚠️ Données temporairement indisponibles";
+    document.getElementById("statusTxt").textContent = "⚠️ Données temporairement indisponibles";
   }
 }
 
