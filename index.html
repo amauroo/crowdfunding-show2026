@@ -102,7 +102,7 @@ h3{margin-top:20px;}
   font-weight:900;
   background:
     linear-gradient(to top, rgba(0,0,0,.7), rgba(0,0,0,0)),
-    url("img/POSTER.jpg") center 15px / cover no-repeat, 
+    url("img/POSTER.jpg") center 5px / cover no-repeat, 
     #333;
 }
 
@@ -113,7 +113,6 @@ h3{margin-top:20px;}
   border-radius:16px;
   margin:18px 0;
   height:450px; 
-  background: #222; /* Fond sombre pour les images en "contain" */
 }
 .carousel-track{
   display:flex;
@@ -122,8 +121,7 @@ h3{margin-top:20px;}
 }
 .carousel-slide{
   min-width:100%;
-  /* Passé en "contain" pour ne plus couper les images */
-  background-size:contain; 
+  background-size:cover; 
   background-position:center;
   background-repeat:no-repeat;
 }
