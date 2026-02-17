@@ -285,8 +285,7 @@ h3{margin-top:20px;}
     </div>
 
     <div class="small" style="margin-top:15px; border-top: 1px solid var(--border); padding-top:10px;">
-      <span id="ibanMsgLbl"></span><br>
-      <code>Show Vélo 2026</code>
+      <strong id="ibanMsgLbl"></strong><br> <code>Show Vélo 2026</code>
     </div>
 
     <div class="small" id="statusTxt"></div>
@@ -343,8 +342,8 @@ fr:{
  minMilestone:"Seuil minimum",
  remaining:"Reste à atteindre",
  iban:"Virement bancaire (copier IBAN)",
- ibanMsg:"Communication suggérée",
- thanks:"🙏 Merci pour votre soutien !",
+ ibanMsg: "Communication suggérée (obligatoire) :",
+ thanks: "🙏 Merci pour votre soutien ! Précisez votre nom dans la communication si vous souhaitez apparaître dans le classement.",
  reached:"🎉 Objectif atteint !",
  day:"jour",
  days:"jours",
@@ -387,8 +386,8 @@ en:{
   minMilestone:"Minimum milestone",
   remaining:"Remaining to goal",
   iban:"Bank transfer (copy IBAN)",
-  ibanMsg:"Suggested message",
-  thanks:"🙏 Every contribution helps!",
+  ibanMsg: "Suggested message (mandatory):",
+  thanks: "🙏 Thanks for your support! Mention your name in the message if you wish to appear in the ranking.",
   reached:"🎉 Goal reached!",
   day:"day",
   days:"days",
@@ -486,31 +485,30 @@ async function loadData(){
       document.getElementById("qrWrap").style.display = "block";
     }
 
-    // Top Donateurs (Dynamique avec Icônes)
+    // Top Donateurs (Dynamique avec Médailles)
     const topList = document.getElementById("topDonorsList");
     topList.innerHTML = "";
-    
-    if(d.topDonors && d.topDonors.length > 0) {
-        d.topDonors.forEach((donor, i) => {
-            const li = document.createElement("li");
-            li.className = "top-item";
-            
-            // Déterminer l'icône ou le rang
-            let rankIcon;
-            if (i === 0) rankIcon = "🥇";
-            else if (i === 1) rankIcon = "🥈";
-            else if (i === 2) rankIcon = "🥉";
-            else rankIcon = `<small style="opacity:0.5; font-weight:bold; width:20px; display:inline-block">${i + 1}.</small>`;
 
-            li.innerHTML = `
-                <span class="top-name">${rankIcon} ${donor.name}</span> 
-                <span class="top-amt">${fmt(donor.amount)}</span>
-            `;
-            topList.appendChild(li);
-        });
+    if (d.topDonors && d.topDonors.length > 0) {
+      d.topDonors.forEach((donor, i) => {
+      const li = document.createElement("li");
+      li.className = "top-item";
+    
+    let rankIcon;
+    if (i === 0) rankIcon = "🥇";
+    else if (i === 1) rankIcon = "🥈";
+    else if (i === 2) rankIcon = "🥉";
+    else rankIcon = `<small style="opacity:0.5; width:20px; display:inline-block">${i + 1}.</small>`;
+
+    li.innerHTML = `
+      <span class="top-name">${rankIcon} ${donor.name}</span> 
+      <span class="top-amt">${fmt(donor.amount)}</span>`;
+      topList.appendChild(li);
+    });
     } else {
-        topList.innerHTML = "<li class='small'>Aucun don pour l'instant</li>";
-    }
+    // Message si la liste est vide (vérifiez ici si les données arrivent)
+    topList.innerHTML = "<li class='small' style='opacity:0.5'>En attente de donateurs...</li>";
+  }
 
     // Youtube
     if (d.youtubeUrl) {
