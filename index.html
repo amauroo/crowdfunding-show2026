@@ -354,17 +354,30 @@ fr:{
  story:{
   title:"Le projet",
   presentationTitle : "Présentation du projet",
-  presentation: `Nous faisons appel à votre générosité...`,
+  presentation: `Nous faisons appel à votre générosité afin de soutenir la réalisation du Show-Vélo, 
+  un spectacle d’acrobaties à vélo préparé tout au long de l’année par près de cinquante scouts âgés de 12 à 18 ans. 
+  Ce spectacle rassemble synchronisation, technique et créativité.`,
   historyTitle: "Histoire du show-vélo",
-  history: `Véritable moment phare...`,
+  history: `Véritable moment phare de la vie de la Troupe, le Show-Vélo est un événement unique mêlant agilité, 
+  force et créativité. Face à un public de plus de 3 000 spectateurs, à la lueur des flambeaux, 
+  les scouts maîtrisent leur vélo pour réaliser des figures toujours plus impressionnantes.`,
   figuresTitle:"Exercices d’ensemble",
-  figures:`Le spectacle se compose...`,
+  figures:`Le spectacle se compose de deux grands types de performances. Les exercices d’ensemble reposent sur 
+  une synchronisation parfaite : alignement millimétré, timing rigoureux et concentration absolue permettent aux scouts 
+  de former des figures spectaculaires. Les acrobaties mettent l’accent sur le risque et la difficulté technique.`,
   orgaTitle:"Organisation technique",
-  orga:`Le Show-Vélo ne pourrait...`,
+  orga:`Le Show-Vélo ne pourrait exister sans une organisation technique pointilleuse. Accompagnement musical, 
+  effets pyrotechniques, et 25 000 watts de jeux de lumière contribuent à faire de cet événement un spectacle hors du commun. 
+  Cette année, nous souhaitons aller plus loin en faisant appel à une équipe professionnelle pour assurer le tournage et 
+  la retransmission du spectacle en direct.`,
   fundingTitle:"Financement",
-  funding:`Le poste de dépense principal...`,
+  funding:`Le poste de dépense principal concerne la sonorisation et les jeux de lumière. Un événement de cette ampleur 
+  nécessite un important apport logistique et technique. À cela s’ajoutent d’autres frais indispensables tels que l’impression 
+  des affiches, l’entretien et la réparation des vélos.`,
   sponsorTitle:"Sponsoring",
-  sponsor:`Pour les entreprises souhaitant...`
+  sponsor:`Pour les entreprises souhaitant soutenir le projet tout en gagnant en visibilité, un système de sponsoring a été mis
+  en place. En contribuant, votre entreprise pourra afficher son logo sur des affiches et l’insérer dans les carnets distribués
+  lors du spectacle.`
  }
 },
 en:{
@@ -385,17 +398,17 @@ en:{
   story:{
     title:"The project",
     presentationTitle : "Project presentation",
-    presentation: `We are calling on your generosity...`,
+    presentation: `We are calling on your generosity to support the realization of the Show-Vélo, a bicycle acrobatics show prepared throughout the year by nearly fifty scouts aged 12 to 18. This show combines synchronization, technique and creativity.`,
     historyTitle: "History of the Show-Vélo",
-    history: `Every three years...`,
-    figuresTitle:"Group exercises",
-    figures:`The show consists...`,
-    orgaTitle:"Technical organization",
-    orga:`The Show-Vélo could not...`,
-    fundingTitle:"Funding",
-    funding:`The main expense concerns...`,
-    sponsorTitle:"Sponsorship",
-    sponsor:`For companies wishing...`
+    history: `Every three years, and since 1942, on the occasion of the Saint-Michel College celebration, the Fourth Ardents Troop of Saint-Michel transforms the school courtyard into a true performance space. A true highlight of the Troop’s life, the Show-Vélo combines agility, strength and creativity.`,
+    figuresTitle:"Group exercises and acrobatics",
+    figures:`The show consists of two main types of performances. Group exercises rely on perfect synchronization: millimeter-precise alignment, rigorous timing and absolute concentration allow the scouts to form spectacular geometric figures. Acrobatics emphasize risk and technical difficulty.`,
+    orgaTitle:"An impressive technical organization",
+    orga:`The Show-Vélo could not exist without meticulous technical organization. Musical accompaniment, pyrotechnic effects, and 25,000 watts of lighting effects help make this event extraordinary. This year, we want to go further by using a professional team to ensure the filming and live broadcast of the show.`,
+    fundingTitle:"What will the funding be used for?",
+    funding:`The main expense concerns sound systems and lighting. An event of this scale requires significant logistical and material resources. Other essential costs include printing posters and booklets, maintenance and repair of bicycles.`,
+    sponsorTitle:"Sponsorship for companies",
+    sponsor:`For companies wishing to support the project while gaining visibility, a sponsorship system has been put in place. By contributing, your company can display its logo on posters and include an ad in the event booklets.`
     }
   }
 };
@@ -473,14 +486,26 @@ async function loadData(){
       document.getElementById("qrWrap").style.display = "block";
     }
 
-    // Top Donateurs (Dynamique)
+    // Top Donateurs (Dynamique avec Icônes)
     const topList = document.getElementById("topDonorsList");
     topList.innerHTML = "";
+    
     if(d.topDonors && d.topDonors.length > 0) {
-        d.topDonors.forEach(donor => {
+        d.topDonors.forEach((donor, i) => {
             const li = document.createElement("li");
             li.className = "top-item";
-            li.innerHTML = `<span class="top-name">${donor.name}</span> <span class="top-amt">${fmt(donor.amount)}</span>`;
+            
+            // Déterminer l'icône ou le rang
+            let rankIcon;
+            if (i === 0) rankIcon = "🥇";
+            else if (i === 1) rankIcon = "🥈";
+            else if (i === 2) rankIcon = "🥉";
+            else rankIcon = `<small style="opacity:0.5; font-weight:bold; width:20px; display:inline-block">${i + 1}.</small>`;
+
+            li.innerHTML = `
+                <span class="top-name">${rankIcon} ${donor.name}</span> 
+                <span class="top-amt">${fmt(donor.amount)}</span>
+            `;
             topList.appendChild(li);
         });
     } else {
