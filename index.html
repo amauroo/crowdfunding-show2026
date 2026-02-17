@@ -45,7 +45,7 @@ body{
 }
 
 .wrap{max-width:1100px;margin:auto;}
-.tools{display:flex;gap:8px;margin-bottom:12px;}
+.tools{display:flex;gap:8px;margin-bottom:12px;justify-content: flex-end;}
 
 .card{
   background:var(--bg);
@@ -82,6 +82,10 @@ h3{margin-top:20px;}
   font-weight:700;
   cursor:pointer;
   width:100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 .btn.primary{background:var(--fill);color:#fff;margin-top:15px;}
 .btn.success{background:var(--success);color:#fff;}
@@ -135,10 +139,11 @@ h3{margin-top:20px;}
   display: flex;
   justify-content: space-between;
   font-size: 12px;
-  padding: 4px 0;
+  padding: 6px 0;
   border-bottom: 1px dashed var(--border);
+  gap: 10px;
 }
-.reward-val { font-weight: 700; color: var(--fill); margin-right: 8px; }
+.reward-val { font-weight: 700; color: var(--fill); white-space: nowrap; }
 
 .top-list { list-style: none; padding: 0; margin: 0; }
 .top-item {
@@ -217,6 +222,7 @@ h3{margin-top:20px;}
 <div class="wrap">
 
 <div class="tools">
+  <button class="btn" style="width:auto" id="btnShare">📤 <span id="shareLbl"></span></button>
   <button class="btn" style="width:auto" id="toggleTheme">🌙</button>
   <button class="btn" style="width:auto" id="toggleLang">FR / EN</button>
 </div>
@@ -346,11 +352,13 @@ fr:{
  days:"jours",
  lastDay:"🔥 Dernier jour",
  rewards:"Barèmes & Cadeaux",
+ share: "Partager",
  rewardsList: [
-    {val: "10€", txt: "Badge exclusif"},
-    {val: "25€", txt: "Affiche dédicacée"},
-    {val: "50€", txt: "1 place VIP"},
-    {val: "100€+", txt: "Pack Gold (2 places + boisson)"}
+    {val: "5€", txt: "Remerciements"},
+    {val: "20€", txt: "Photo grande pyramide + contreparties précédentes"},
+    {val: "30€", txt: "5 photos + contreparties précédentes"},
+    {val: "50€", txt: "Nom dans le carnet + contreparties précédentes"},
+    {val: "150€", txt: "Savons + contreparties précédentes"}
  ],
  topDonors:"Top 5 Donateurs",
  story:{
@@ -384,11 +392,13 @@ en:{
   days:"days",
   lastDay:"🔥 Last day",
   rewards:"Rewards & Gifts",
+  share: "Share",
   rewardsList: [
-    {val: "10€", txt: "Exclusive badge"},
-    {val: "25€", txt: "Signed poster"},
-    {val: "50€", txt: "1 VIP ticket"},
-    {val: "100€+", txt: "Gold Pack (2 tickets + drink)"}
+    {val: "5€", txt: "A big thank you"},
+    {val: "20€", txt: "Photo of the great pyramid + previous rewards"},
+    {val: "30€", txt: "5 photos + previous rewards"},
+    {val: "50€", txt: "Name in the event booklet + previous rewards"},
+    {val: "150€", txt: "Soaps + previous rewards"}
   ],
   topDonors:"Top 5 Donors",
   story:{
@@ -430,8 +440,8 @@ function applyLang(){
  set("nameInstructionLbl", L.nameInstruction);
  set("rewardsTitle", L.rewards);
  set("topDonorsTitle", L.topDonors);
+ set("shareLbl", L.share);
  
- // Génération des récompenses traduites
  const rList = document.getElementById("rewardsList");
  rList.innerHTML = L.rewardsList.map(r => `
     <div class="reward-row"><span class="reward-val">${r.val}</span> <span>${r.txt}</span></div>
@@ -452,6 +462,23 @@ function applyLang(){
  set("sponsorTitle",S.sponsorTitle);
  set("sponsorTxt",S.sponsor);
 }
+
+// Logique de partage
+document.getElementById("btnShare").onclick = async () => {
+    const shareData = {
+        title: 'Show Vélo 2026',
+        text: 'Soutenez le projet Show Vélo 2026 des scouts de Saint-Michel !',
+        url: window.location.href
+    };
+    try {
+        if (navigator.share) {
+            await navigator.share(shareData);
+        } else {
+            await navigator.clipboard.writeText(window.location.href);
+            alert(lang === "fr" ? "Lien copié dans le presse-papier !" : "Link copied to clipboard!");
+        }
+    } catch (err) { console.log(err); }
+};
 
 async function loadData(){
   try{
